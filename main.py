@@ -22,7 +22,7 @@ class Window(QMainWindow):
         self.btn.clicked.connect(self.change_label)
 
     def change_label(self):
-        self.i += 1
+        self.i += 2
         self.main_text.setText("Button was pressed: " + str(self.i))
 
 
