@@ -24,6 +24,8 @@ class Window(QMainWindow):
     def change_label(self):
         self.i += 1
         self.main_text.setText("Button was pressed: " + str(self.i))
+        
+        # TEST TEST TEST
 
 
 def application():
