@@ -31,7 +31,7 @@
      <rect>
       <x>0</x>
       <y>119</y>
-      <width>160</width>
+      <width>161</width>
       <height>481</height>
      </rect>
     </property>
@@ -62,7 +62,7 @@
    <widget class="Line" name="line">
     <property name="geometry">
      <rect>
-      <x>158</x>
+      <x>160</x>
       <y>0</y>
       <width>2</width>
       <height>600</height>
@@ -72,16 +72,40 @@
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>21</height>
-    </rect>
-   </property>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>160</width>
+      <height>119</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="gridWidget" native="true">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>162</x>
+      <y>0</y>
+      <width>638</width>
+      <height>600</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(244, 244, 244);</string>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetDefaultConstraint</enum>
+     </property>
+    </layout>
+   </widget>
   </widget>
  </widget>
  <resources/>
