@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>if_form</class>
+ <widget class="QWidget" name="if_form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>160</width>
+    <height>75</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
+  <property name="windowTitle">
+   <string>If settings</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {
+  background-color: #2a1a41;
+}
+
+QPushButton {
+  border-radius: 4px;
+  background-color: #8EDBCE;
+  font-family: 'Montserrat', sans-serif;
+  color: black;
+  transition: background-color 1000ms linear;
+}
+
+QPushButton:hover {
+  background-color: #CDF9EF;
+}
+
+QLabel {
+  color: #4bd1e8;
+}
+
+QLineEdit{
+  border-radius: 1px;
+  background-color: #4bd1e8;
+  border: 1px solid white;
+}
+
+QComboBox {
+  background-color: #4bd1e8;
+  color: black;
+}
+
+QComboBox QAbstractItemView {
+  background-color: #4bd1e8;
+  color: black;
+}
+
+</string>
+  </property>
+  <widget class="QLineEdit" name="left_if_box">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>51</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="right_if_box">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>10</y>
+     <width>51</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="add_if_btn">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>40</y>
+     <width>141</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>ADD If</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="if_comboBox">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>10</y>
+     <width>41</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::CustomContextMenu</enum>
+   </property>
+   <item>
+    <property name="text">
+     <string>==</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>&lt;</string>
+    </property>
+   </item>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
