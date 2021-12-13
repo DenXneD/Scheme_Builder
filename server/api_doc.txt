@@ -1,0 +1,46 @@
+------------------------------------------------------------------------------------------------------------------------
+- SPRING:
+
+{
+    - id: spring1
+    (there will be id of spring)
+
+    - operations: [PRINT_OPERATION_DICT,  INPUT_OPERATION_DICT,  IF_OPERATION_DICT]
+    (there will be list of operation dicts, examples are below)
+}
+
+
+------------------------------------------------------------------------------------------------------------------------
+- OPERATIONS:
+
+ASSIGN_OPERATION_DICT:
+{
+    - id: assign
+    - var_name: a
+    - to_assign: 1 | b | c
+} -> a = 1 | a = b | a = c
+
+PRINT_OPERATION_DICT:
+{
+    - id: print
+    - var_name: a
+} -> print(a)
+
+INPUT_OPERATION_DICT:
+{
+    - id: input
+    - var_name: a
+} -> a = input()
+
+IF_OPERATION_DICT:
+{
+    - id: if
+    - var_name: a
+    - sign: == | <
+    - to_compare: 5
+} -> if a == 5:
+
+ENDIF_OPERATION_DICT:
+{
+    - id: endif
+}
