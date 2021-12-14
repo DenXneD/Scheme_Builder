@@ -48,7 +48,8 @@ class ConditionalOperation(Operation):
         self.sign = sign
         self.to_compare = to_compare
 
-    def parse(self, operation_json: dict):
+    @classmethod
+    def parse(cls, operation_json: dict):
         return ConditionalOperation(
             var_name=operation_json["var_name"],
             sign=operation_json["sign"],
@@ -72,7 +73,8 @@ class ConditionalOperation(Operation):
 class EndConditionalOperation(Operation):
     id = Operation.ID_ENDIF
 
-    def parse(self, operation_json: dict):
+    @classmethod
+    def parse(cls, operation_json: dict):
         return EndConditionalOperation()
 
     @classproperty
@@ -93,7 +95,8 @@ class AssignmentOperation(Operation):
         self.var_name = var_name
         self.to_assign = to_assign
 
-    def parse(self, operation_json: dict):
+    @classmethod
+    def parse(cls, operation_json: dict):
         return AssignmentOperation(
             var_name=operation_json["var_name"],
             to_assign=operation_json["to_assign"],
@@ -118,7 +121,8 @@ class PrintOperation(Operation):
     def __init__(self, var_name: str):
         self.var_name = var_name
 
-    def parse(self, operation_json: dict):
+    @classmethod
+    def parse(cls, operation_json: dict):
         return PrintOperation(
             var_name=operation_json["var_name"]
         )
@@ -141,7 +145,8 @@ class InputOperation(Operation):
     def __init__(self, var_name: str):
         self.var_name = var_name
 
-    def parse(self, operation_json: dict):
+    @classmethod
+    def parse(cls, operation_json: dict):
         return InputOperation(
             var_name=operation_json["var_name"]
         )
