@@ -1,5 +1,5 @@
-from server.spring import Spring
-from server.pickle_dao import PickleDAO
+from server.spring.domain.spring import Spring
+from server.spring.pickle_dao import SpringDAO
 from server.parser import SpringsToCodeParser
 
 
@@ -10,7 +10,7 @@ class SpringsModel(object):
         :param springs_json_list: list of springs to save
         :type springs_json_list: list[dict]
         """
-        PickleDAO.insert_springs(
+        SpringDAO.insert_springs(
             springs=[Spring.parse(spring_json) for spring_json in springs_json_list]
         )
 
@@ -20,7 +20,7 @@ class SpringsModel(object):
         :return: list of springs json version
         :rtype: list[dict]
         """
-        return [spring.json for spring in PickleDAO.get_springs()]
+        return [spring.json for spring in SpringDAO.get_springs()]
 
     @classmethod
     def generate_springs_python_file(cls, springs_json_list: list):

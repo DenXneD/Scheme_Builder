@@ -1,8 +1,8 @@
 import pickle
-from server.spring import Spring
+from server.spring.domain.spring import Spring
 
 
-class PickleDAO(object):
+class SpringDAO(object):
     @classmethod
     def insert_springs(cls, springs):
         """

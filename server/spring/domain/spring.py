@@ -1,4 +1,4 @@
-from server.operation import Operation, OPERATIONS_MAPPING
+from server.spring.domain.operation import Operation, OPERATIONS_MAPPING
 
 
 class Spring(object):
