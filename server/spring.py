@@ -1,4 +1,4 @@
-from .operation import Operation, OPERATIONS_MAPPING
+from server.operation import Operation, OPERATIONS_MAPPING
 
 
 class Spring(object):
@@ -11,9 +11,11 @@ class Spring(object):
         :type operations: list[Operation]
         """
         self.id = id
+        self.name = f"spring{self.id}"
         self.operations = operations
 
-    def parse(self, spring_json):
+    @classmethod
+    def parse(cls, spring_json):
         def _parse_operation(operation_json):
             operation = OPERATIONS_MAPPING.get(operation_json["id"])
             if not operation:
@@ -34,8 +36,9 @@ class Spring(object):
     def as_code(self):
         """
         :raises BrokenPipeError: when user put incorrect conditional operations sequence
+        :rtype: str
         """
-        code = f"def spring{self.id}():\n"
+        code = f"def {self.name}():\n"
         tabs_q = 1
         tab = '\t'
         for operation in self.operations:
@@ -46,7 +49,6 @@ class Spring(object):
                 tabs_q -= 1
 
             if tabs_q < 1:
-                raise BrokenPipeError
-
-
-
+                tabs_q += 1
+                # raise BrokenPipeError
+        return code

@@ -1,5 +1,5 @@
 import pickle
-from .spring import Spring
+from server.spring import Spring
 
 
 class PickleDAO(object):
@@ -21,4 +21,4 @@ class PickleDAO(object):
         """
 
         with open('springs.pickle', 'rb') as file:
-            return pickle.load(file)
+            return pickle.load(file) or []
