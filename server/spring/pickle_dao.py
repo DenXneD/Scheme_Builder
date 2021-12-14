@@ -10,7 +10,7 @@ class SpringDAO(object):
         :type springs: list[Spring]
         """
 
-        with open('../springs.pickle', 'wb') as file:
+        with open('springs.pickle', 'wb') as file:
             pickle.dump(springs, file)
 
     @classmethod
@@ -20,5 +20,5 @@ class SpringDAO(object):
         :rtype: list[Spring]
         """
 
-        with open('../springs.pickle', 'rb') as file:
+        with open('springs.pickle', 'rb') as file:
             return pickle.load(file) or []
