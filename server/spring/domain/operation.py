@@ -3,12 +3,14 @@ from erfa.helpers import classproperty
 
 
 class Operation(object):
-    _ID_IF = "if"
-    _ID_ENDIF = "endif"
-    _ID_ASSIGN = "assign"
-    _ID_PRINT = "print"
-    _ID_INPUT = "input"
-    IDENTIFIERS = [_ID_IF, _ID_ENDIF, _ID_ASSIGN, _ID_PRINT, _ID_INPUT]
+    ID_IF = "if"
+    ID_ENDIF = "endif"
+    ID_ASSIGN = "assign"
+    ID_PRINT = "print"
+    ID_INPUT = "input"
+    ID_DUMMY = "dummy id"
+    IDENTIFIERS = [ID_IF, ID_ENDIF, ID_ASSIGN, ID_PRINT, ID_INPUT]
+    id = ID_DUMMY
 
     @abstractmethod
     def parse(self, operation_json: dict):
@@ -37,7 +39,7 @@ class Operation(object):
 
 
 class ConditionalOperation(Operation):
-    id = Operation._ID_IF
+    id = Operation.ID_IF
     _SIGNS = ["==", "!=", ">", "<"]
 
     def __init__(self, var_name: str, sign: str, to_compare: str):
@@ -46,7 +48,8 @@ class ConditionalOperation(Operation):
         self.sign = sign
         self.to_compare = to_compare
 
-    def parse(self, operation_json: dict):
+    @classmethod
+    def parse(cls, operation_json: dict):
         return ConditionalOperation(
             var_name=operation_json["var_name"],
             sign=operation_json["sign"],
@@ -64,13 +67,14 @@ class ConditionalOperation(Operation):
 
     @classproperty
     def code_row(self):
-        return f"if {self.var_name} {self.sign} {self.to_compare}:"
+        return f"if {self.var_name} {self.sign} {self.to_compare}:\n"
 
 
 class EndConditionalOperation(Operation):
-    id = Operation._ID_ENDIF
+    id = Operation.ID_ENDIF
 
-    def parse(self, operation_json: dict):
+    @classmethod
+    def parse(cls, operation_json: dict):
         return EndConditionalOperation()
 
     @classproperty
@@ -81,17 +85,18 @@ class EndConditionalOperation(Operation):
 
     @classproperty
     def code_row(self):
-        return ""
+        return "\n"
 
 
 class AssignmentOperation(Operation):
-    id = Operation._ID_ASSIGN
+    id = Operation.ID_ASSIGN
 
     def __init__(self, var_name: str, to_assign: str):
         self.var_name = var_name
         self.to_assign = to_assign
 
-    def parse(self, operation_json: dict):
+    @classmethod
+    def parse(cls, operation_json: dict):
         return AssignmentOperation(
             var_name=operation_json["var_name"],
             to_assign=operation_json["to_assign"],
@@ -107,16 +112,17 @@ class AssignmentOperation(Operation):
 
     @classproperty
     def code_row(self):
-        return f"{self.var_name} = {self.to_assign}"
+        return f"{self.var_name} = {self.to_assign}\n"
 
 
 class PrintOperation(Operation):
-    id = Operation._ID_PRINT
+    id = Operation.ID_PRINT
 
     def __init__(self, var_name: str):
         self.var_name = var_name
 
-    def parse(self, operation_json: dict):
+    @classmethod
+    def parse(cls, operation_json: dict):
         return PrintOperation(
             var_name=operation_json["var_name"]
         )
@@ -130,16 +136,17 @@ class PrintOperation(Operation):
 
     @classproperty
     def code_row(self):
-        return f"print({self.var_name})"
+        return f"print({self.var_name})\n"
 
 
 class InputOperation(Operation):
-    id = Operation._ID_INPUT
+    id = Operation.ID_INPUT
 
     def __init__(self, var_name: str):
         self.var_name = var_name
 
-    def parse(self, operation_json: dict):
+    @classmethod
+    def parse(cls, operation_json: dict):
         return InputOperation(
             var_name=operation_json["var_name"]
         )
@@ -153,7 +160,7 @@ class InputOperation(Operation):
 
     @classproperty
     def code_row(self):
-        return f"{self.var_name} = input()"
+        return f"{self.var_name} = input()\n"
 
 
 OPERATIONS = [AssignmentOperation, ConditionalOperation, EndConditionalOperation, InputOperation, PrintOperation]
