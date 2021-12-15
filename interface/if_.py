@@ -11,8 +11,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_if_form(object):
+class Ui_if_form(QtWidgets.QDialog):
+    def __init__(self, root, **kwargs):
+        super().__init__(root, **kwargs)
+        self.main = root
+
     def setupUi(self, if_form):
+        self.if_form = if_form
         if_form.setObjectName("if_form")
         if_form.resize(160, 75)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -22,42 +27,43 @@ class Ui_if_form(object):
         if_form.setSizePolicy(sizePolicy)
         if_form.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
         if_form.setStyleSheet("QWidget {\n"
-"  background-color: #2a1a41;\n"
-"}\n"
-"\n"
-"QPushButton {\n"
-"  border-radius: 4px;\n"
-"  background-color: #8EDBCE;\n"
-"  font-family: \'Montserrat\', sans-serif;\n"
-"  color: black;\n"
-"  transition: background-color 1000ms linear;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"  background-color: #CDF9EF;\n"
-"}\n"
-"\n"
-"QLabel {\n"
-"  color: #4bd1e8;\n"
-"}\n"
-"\n"
-"QLineEdit{\n"
-"  border-radius: 1px;\n"
-"  background-color: #4bd1e8;\n"
-"  border: 1px solid white;\n"
-"}\n"
-"\n"
-"QComboBox {\n"
-"  background-color: #4bd1e8;\n"
-"  color: black;\n"
-"}\n"
-"\n"
-"QComboBox QAbstractItemView {\n"
-"  background-color: #4bd1e8;\n"
-"  color: black;\n"
-"}\n"
-"\n"
-"")
+                              "  background-color: #2a1a41;\n"
+                              "}\n"
+                              "\n"
+                              "QPushButton {\n"
+                              "  border-radius: 4px;\n"
+                              "  background-color: #8EDBCE;\n"
+                              "  font: \"Roboto Mono\";\n"
+                              "  font-size: 12px;\n"
+                              "  color: black;\n"
+                              "  transition: background-color 1000ms linear;\n"
+                              "}\n"
+                              "\n"
+                              "QPushButton:hover {\n"
+                              "  background-color: #CDF9EF;\n"
+                              "}\n"
+                              "\n"
+                              "QLabel {\n"
+                              "  color: #4bd1e8;\n"
+                              "}\n"
+                              "\n"
+                              "QLineEdit{\n"
+                              "  border-radius: 1px;\n"
+                              "  background-color: #4bd1e8;\n"
+                              "  border: 1px solid white;\n"
+                              "}\n"
+                              "\n"
+                              "QComboBox {\n"
+                              "  background-color: #4bd1e8;\n"
+                              "  color: black;\n"
+                              "}\n"
+                              "\n"
+                              "QComboBox QAbstractItemView {\n"
+                              "  background-color: #4bd1e8;\n"
+                              "  color: black;\n"
+                              "}\n"
+                              "\n"
+                              "")
         self.left_if_box = QtWidgets.QLineEdit(if_form)
         self.left_if_box.setGeometry(QtCore.QRect(10, 10, 51, 21))
         self.left_if_box.setObjectName("left_if_box")
@@ -67,11 +73,15 @@ class Ui_if_form(object):
         self.add_if_btn = QtWidgets.QPushButton(if_form)
         self.add_if_btn.setGeometry(QtCore.QRect(10, 40, 141, 25))
         self.add_if_btn.setObjectName("add_if_btn")
+        self.add_if_btn.clicked.connect(self.add_if_event)
         self.if_comboBox = QtWidgets.QComboBox(if_form)
         self.if_comboBox.setGeometry(QtCore.QRect(60, 10, 41, 21))
         self.if_comboBox.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.if_comboBox.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.if_comboBox.setObjectName("if_comboBox")
+        self.if_comboBox.addItem("")
+        self.if_comboBox.addItem("")
+        self.if_comboBox.addItem("")
         self.if_comboBox.addItem("")
         self.if_comboBox.addItem("")
 
@@ -84,3 +94,17 @@ class Ui_if_form(object):
         self.add_if_btn.setText(_translate("if_form", "ADD If"))
         self.if_comboBox.setItemText(0, _translate("if_form", "=="))
         self.if_comboBox.setItemText(1, _translate("if_form", "<"))
+        self.if_comboBox.setItemText(2, _translate("if_form", ">"))
+        self.if_comboBox.setItemText(3, _translate("if_form", "<="))
+        self.if_comboBox.setItemText(4, _translate("if_form", ">="))
+
+    def add_if_event(self):
+        operation_info = {"id": "If",
+                          "var_name": self.left_if_box.text(),
+                          "sign": self.if_comboBox.currentText(),
+                          "to_compare": self.right_if_box.text()}
+        list_text = (operation_info["id"] + ": " +
+                     operation_info["var_name"] + " " +
+                     operation_info["sign"] + " " +
+                     operation_info["to_compare"])
+        self.main.add_event(self.if_form, operation_info, list_text)

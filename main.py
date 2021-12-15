@@ -7,9 +7,5 @@ if __name__ == "__main__":
     MainWindow = QtWidgets.QMainWindow()
     ui = main_window.Ui_MainWindow()
     ui.setupUi(MainWindow)
-    ui.implement_secondary_windows()
     MainWindow.show()
     sys.exit(app.exec_())
-
-
-

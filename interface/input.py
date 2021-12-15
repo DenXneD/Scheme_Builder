@@ -11,8 +11,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_input_form(object):
+class Ui_input_form(QtWidgets.QDialog):
+    def __init__(self, root, **kwargs):
+        super().__init__(root, **kwargs)
+        self.main = root
+
     def setupUi(self, input_form):
+        self.input_form = input_form
         input_form.setObjectName("input_form")
         input_form.resize(150, 75)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -21,37 +26,39 @@ class Ui_input_form(object):
         sizePolicy.setHeightForWidth(input_form.sizePolicy().hasHeightForWidth())
         input_form.setSizePolicy(sizePolicy)
         input_form.setStyleSheet("QWidget {\n"
-"  background-color: #2a1a41;\n"
-"}\n"
-"\n"
-"QPushButton {\n"
-"  border-radius: 4px;\n"
-"  background-color: #8EDBCE;\n"
-"  font-family: \'Montserrat\', sans-serif;\n"
-"  color: black;\n"
-"  transition: background-color 1000ms linear;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"  background-color: #CDF9EF;\n"
-"}\n"
-"\n"
-"QLabel {\n"
-"  color: #4bd1e8;\n"
-"}\n"
-"\n"
-"QLineEdit {\n"
-"  border-radius: 1px;\n"
-"  border: 1px solid white;\n"
-"  background-color: #4bd1e8\n"
-"}\n"
-"")
+                                 "  background-color: #2a1a41;\n"
+                                 "}\n"
+                                 "\n"
+                                 "QPushButton {\n"
+                                 "  border-radius: 4px;\n"
+                                 "  background-color: #8EDBCE;\n"
+                                 "  font: \"Roboto Mono\";\n"
+                                 "  font-size: 12px;\n"
+                                 "  color: black;\n"
+                                 "  transition: background-color 1000ms linear;\n"
+                                 "}\n"
+                                 "\n"
+                                 "QPushButton:hover {\n"
+                                 "  background-color: #CDF9EF;\n"
+                                 "}\n"
+                                 "\n"
+                                 "QLabel {\n"
+                                 "  color: #4bd1e8;\n"
+                                 "}\n"
+                                 "\n"
+                                 "QLineEdit {\n"
+                                 "  border-radius: 1px;\n"
+                                 "  border: 1px solid white;\n"
+                                 "  background-color: #4bd1e8\n"
+                                 "}\n"
+                                 "")
         self.right_input_box = QtWidgets.QLineEdit(input_form)
         self.right_input_box.setGeometry(QtCore.QRect(90, 10, 50, 20))
         self.right_input_box.setObjectName("right_input_box")
         self.add_input_btn = QtWidgets.QPushButton(input_form)
         self.add_input_btn.setGeometry(QtCore.QRect(10, 40, 130, 25))
         self.add_input_btn.setObjectName("add_input_btn")
+        self.add_input_btn.clicked.connect(self.add_input_event)
         self.input_label = QtWidgets.QLabel(input_form)
         self.input_label.setGeometry(QtCore.QRect(10, 10, 71, 21))
         self.input_label.setObjectName("input_label")
@@ -65,3 +72,8 @@ class Ui_input_form(object):
         self.add_input_btn.setText(_translate("input_form", "ADD Input"))
         self.input_label.setText(_translate("input_form", "Variable name"))
 
+    def add_input_event(self):
+        operation_info = {"id": "Input",
+                          "var_name": self.right_input_box.text()}
+        list_text = (operation_info["id"] + ": " + operation_info["var_name"])
+        self.main.add_event(self.input_form, operation_info, list_text)

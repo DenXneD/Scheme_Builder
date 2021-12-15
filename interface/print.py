@@ -11,8 +11,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_print_form(object):
+class Ui_print_form(QtWidgets.QDialog):
+    def __init__(self, root, **kwargs):
+        super().__init__(root, **kwargs)
+        self.main = root
+
     def setupUi(self, print_form):
+        self.print_form = print_form
         print_form.setObjectName("print_form")
         print_form.resize(150, 75)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -21,37 +26,39 @@ class Ui_print_form(object):
         sizePolicy.setHeightForWidth(print_form.sizePolicy().hasHeightForWidth())
         print_form.setSizePolicy(sizePolicy)
         print_form.setStyleSheet("QWidget {\n"
-"  background-color: #2a1a41;\n"
-"}\n"
-"\n"
-"QPushButton {\n"
-"  border-radius: 4px;\n"
-"  background-color: #8EDBCE;\n"
-"  font-family: \'Montserrat\', sans-serif;\n"
-"  color: black;\n"
-"  transition: background-color 1000ms linear;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"  background-color: #CDF9EF;\n"
-"}\n"
-"\n"
-"QLabel {\n"
-"  color: #4bd1e8;\n"
-"}\n"
-"\n"
-"QLineEdit {\n"
-"  border-radius: 1px;\n"
-"  border: 1px solid white;\n"
-"  background-color: #4bd1e8\n"
-"}\n"
-"")
+                                 "  background-color: #2a1a41;\n"
+                                 "}\n"
+                                 "\n"
+                                 "QPushButton {\n"
+                                 "  border-radius: 4px;\n"
+                                 "  background-color: #8EDBCE;\n"
+                                 "  font: \"Roboto Mono\";\n"
+                                 "  font-size: 12px;\n"
+                                 "  color: black;\n"
+                                 "  transition: background-color 1000ms linear;\n"
+                                 "}\n"
+                                 "\n"
+                                 "QPushButton:hover {\n"
+                                 "  background-color: #CDF9EF;\n"
+                                 "}\n"
+                                 "\n"
+                                 "QLabel {\n"
+                                 "  color: #4bd1e8;\n"
+                                 "}\n"
+                                 "\n"
+                                 "QLineEdit {\n"
+                                 "  border-radius: 1px;\n"
+                                 "  border: 1px solid white;\n"
+                                 "  background-color: #4bd1e8\n"
+                                 "}\n"
+                                 "")
         self.print_box = QtWidgets.QLineEdit(print_form)
         self.print_box.setGeometry(QtCore.QRect(90, 10, 50, 20))
         self.print_box.setObjectName("print_box")
         self.add_print_btn = QtWidgets.QPushButton(print_form)
         self.add_print_btn.setGeometry(QtCore.QRect(10, 40, 130, 25))
         self.add_print_btn.setObjectName("add_print_btn")
+        self.add_print_btn.clicked.connect(self.add_print_event)
         self.print_label = QtWidgets.QLabel(print_form)
         self.print_label.setGeometry(QtCore.QRect(10, 10, 71, 21))
         self.print_label.setObjectName("print_label")
@@ -64,3 +71,8 @@ class Ui_print_form(object):
         print_form.setWindowTitle(_translate("print_form", "Print settings"))
         self.add_print_btn.setText(_translate("print_form", "ADD Print"))
         self.print_label.setText(_translate("print_form", "Variable name"))
+
+    def add_print_event(self):
+        operation_info = {"id": "Print", "var_name": self.print_box.text()}
+        list_text = (operation_info["id"] + ": " + operation_info["var_name"])
+        self.main.add_event(self.print_form, operation_info, list_text)
