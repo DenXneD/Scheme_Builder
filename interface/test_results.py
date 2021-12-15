@@ -11,34 +11,42 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_test_results_form(object):
+class Ui_test_results_form(QtWidgets.QDialog):
+    def __init__(self, root, **kwargs):
+        super().__init__(root, **kwargs)
+        self.main = root
+        self._translate = QtCore.QCoreApplication.translate
+        self.html_text = ""
+
     def setupUi(self, test_results_form):
+        resize = 150
         test_results_form.setObjectName("test_results_form")
-        test_results_form.resize(280, 192)
-        test_results_form.setMinimumSize(QtCore.QSize(280, 192))
-        test_results_form.setMaximumSize(QtCore.QSize(280, 192))
+        test_results_form.resize(280+resize, 192)
+        test_results_form.setMinimumSize(QtCore.QSize(280+resize, 192))
+        test_results_form.setMaximumSize(QtCore.QSize(280+resize, 192))
         test_results_form.setStyleSheet("QWidget {\n"
-"  background-color: #2a1a41;\n"
-"  font-family: \'Montserrat\', sans-serif;\n"
-"}\n"
-"\n"
-"QLabel {\n"
-"  color: #4bd1e8;\n"
-"}\n"
-"\n"
-"\n"
-"QTextBrowser {\n"
-"  border-radius: 4px;\n"
-"  background-color: #4bd1e8;\n"
-"}\n"
-"\n"
-"\n"
-"")
+                                        "  background-color: #2a1a41;\n"
+                                        "  font: \"Roboto Mono\";\n"
+                                        "  font-size: 12px;\n"
+                                        "}\n"
+                                        "\n"
+                                        "QLabel {\n"
+                                        "  color: #4bd1e8;\n"
+                                        "}\n"
+                                        "\n"
+                                        "\n"
+                                        "QTextBrowser {\n"
+                                        "  border-radius: 4px;\n"
+                                        "  background-color: #4bd1e8;\n"
+                                        "}\n"
+                                        "\n"
+                                        "\n"
+                                        "")
         self.test_relults_label = QtWidgets.QLabel(test_results_form)
-        self.test_relults_label.setGeometry(QtCore.QRect(20, 10, 61, 16))
+        self.test_relults_label.setGeometry(QtCore.QRect(20, 10, 81, 16))
         self.test_relults_label.setObjectName("test_relults_label")
         self.text_results_box = QtWidgets.QTextBrowser(test_results_form)
-        self.text_results_box.setGeometry(QtCore.QRect(20, 30, 241, 143))
+        self.text_results_box.setGeometry(QtCore.QRect(20, 30, 241+resize, 143))
         self.text_results_box.setFrameShadow(QtWidgets.QFrame.Raised)
         self.text_results_box.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.text_results_box.setObjectName("text_results_box")
@@ -46,14 +54,11 @@ class Ui_test_results_form(object):
         self.retranslateUi(test_results_form)
         QtCore.QMetaObject.connectSlotsByName(test_results_form)
 
+    def data_to_HTML(self, data):
+        for item in data:
+            self.html_text += "<p style=\" margin:0;\">"+ item["name"] + " - " + item["state"] +"</p>\n"
+        self.text_results_box.setHtml(self._translate("test_results_form", self.html_text))
+
     def retranslateUi(self, test_results_form):
-        _translate = QtCore.QCoreApplication.translate
-        test_results_form.setWindowTitle(_translate("test_results_form", "Form"))
-        self.test_relults_label.setText(_translate("test_results_form", "Test results"))
-        self.text_results_box.setHtml(_translate("test_results_form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Montserrat,sans-serif\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Поток 1 - OK</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Поток 2 - ОК</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Поток - ПОмилка в блоці #</p></body></html>"))
+        test_results_form.setWindowTitle(self._translate("test_results_form", "Form"))
+        self.test_relults_label.setText(self._translate("test_results_form", "Test results"))
