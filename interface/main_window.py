@@ -296,9 +296,9 @@ class Ui_MainWindow(QtWidgets.QWidget):
     def test_threads_event(self):
         # threads_for_server = self.reform_threads_list()
         # data = SpringsModel.test_springs(threads_for_server)
-
-        data = "1. Thread1 - OK\n2. Thread - ERROR in block 3; If: e == 5; variable 'e' is not defined"
-        self.result_window("Test result", data)
+        if self.thread_list.count() != 0:
+            data = "1. Thread1 - OK\n2. Thread - ERROR in block 3; If: e == 5; variable 'e' is not defined"
+            self.result_window("Test result", data)
 
     def save_threads_event(self):
         file_for_save = self.reform_threads_list()
