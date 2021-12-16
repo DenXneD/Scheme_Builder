@@ -50,12 +50,11 @@ ENDIF_OPERATION_DICT:
 TEST_RESULT:
 "{thread_name}: OK | {error message}"
 
-
 API:
 ------------------------------------------------------------------------------------------------------------------------
-SAVE THREADS (list[SPRING]) -> None
-LOAD THREADS () -> list[SPRING]
+SAVE THREADS (file_path, list[SPRING]) -> None
+LOAD THREADS (file_path) -> list[SPRING]
 
-GENERATE CODE (SPRING) -> string
+GENERATE CODE (file_path, list[SPRING]) -> string
 TEST THREADS (list[SPRING]) -> list[TEST_RESULT]
 ------------------------------------------------------------------------------------------------------------------------
