@@ -36,12 +36,12 @@ class Spring(object):
         return {
             "id": self.id,
             "thread_name": self.name,
-            "operations": [operation.json for operation in self.operations]
+            "operations": [operation.json() for operation in self.operations]
         }
 
     def as_code(self):
         """
-        :raises BrokenPipeError: when user put incorrect conditional operations sequence
+        :return: generated code of spring method
         :rtype: str
         """
         code = f"# Thread '{self.name}'\n" \
@@ -57,5 +57,5 @@ class Spring(object):
 
             if tabs_q < 1:
                 tabs_q += 1
-                # raise BrokenPipeError
+
         return code
