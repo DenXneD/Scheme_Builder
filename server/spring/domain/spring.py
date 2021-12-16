@@ -2,16 +2,20 @@ from server.spring.domain.operation import Operation, OPERATIONS_MAPPING
 
 
 class Spring(object):
-    def __init__(self, id, operations):
+    def __init__(self, id, name, operations):
         """
         :param id: id of spring
         :type id: int
+
+        :param name: thread name
+        :type name: string
 
         :param operations: sequence of spring operations
         :type operations: list[Operation]
         """
         self.id = id
-        self.name = f"spring{self.id}"
+        self.name = name
+        self.method_name = f"thread{self.id+1}"
         self.operations = operations
 
     @classmethod
@@ -19,17 +23,19 @@ class Spring(object):
         def _parse_operation(operation_json):
             operation = OPERATIONS_MAPPING.get(operation_json["id"])
             if not operation:
-                raise AttributeError
+                raise AttributeError(f"OPERATION WITH {operation_json['id']} NOT EXIST")
             return operation.parse(operation_json)
 
         return Spring(
             id=spring_json["id"],
+            name=spring_json["thread_name"],
             operations=[_parse_operation(oj) for oj in spring_json["operations"]]
         )
 
     def json(self):
         return {
             "id": self.id,
+            "thread_name": self.name,
             "operations": [operation.json for operation in self.operations]
         }
 
@@ -38,7 +44,8 @@ class Spring(object):
         :raises BrokenPipeError: when user put incorrect conditional operations sequence
         :rtype: str
         """
-        code = f"def {self.name}():\n"
+        code = f"# Thread '{self.name}'\n" \
+               f"def {self.method_name}():\n"
         tabs_q = 1
         tab = '\t'
         for operation in self.operations:

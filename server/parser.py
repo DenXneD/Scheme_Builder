@@ -10,10 +10,10 @@ class SpringsToCodeParser(object):
         """
         code = ""
         for spring in springs:
-            code += spring.as_code() + "\n\n"
+            code += spring.as_code() + "\n"
 
         for spring in springs:
-            code += f"{spring.name}()\n"
+            code += f"{spring.method_name}()\n"
 
         return code
 
