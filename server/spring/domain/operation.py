@@ -3,11 +3,11 @@ from erfa.helpers import classproperty
 
 
 class Operation(object):
-    ID_IF = "if"
-    ID_ENDIF = "endif"
-    ID_ASSIGN = "assign"
-    ID_PRINT = "print"
-    ID_INPUT = "input"
+    ID_IF = "If"
+    ID_ENDIF = "Endif"
+    ID_ASSIGN = "Assign"
+    ID_PRINT = "Print"
+    ID_INPUT = "Input"
     ID_DUMMY = "dummy id"
     IDENTIFIERS = [ID_IF, ID_ENDIF, ID_ASSIGN, ID_PRINT, ID_INPUT]
     id = ID_DUMMY

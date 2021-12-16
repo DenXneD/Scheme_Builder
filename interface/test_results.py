@@ -24,24 +24,7 @@ class Ui_test_results_form(QtWidgets.QDialog):
         test_results_form.resize(280+resize, 192)
         test_results_form.setMinimumSize(QtCore.QSize(280+resize, 192))
         test_results_form.setMaximumSize(QtCore.QSize(280+resize, 192))
-        test_results_form.setStyleSheet("QWidget {\n"
-                                        "  background-color: #2a1a41;\n"
-                                        "  font: \"Roboto Mono\";\n"
-                                        "  font-size: 12px;\n"
-                                        "}\n"
-                                        "\n"
-                                        "QLabel {\n"
-                                        "  color: #4bd1e8;\n"
-                                        "}\n"
-                                        "\n"
-                                        "\n"
-                                        "QTextBrowser {\n"
-                                        "  border-radius: 4px;\n"
-                                        "  background-color: #4bd1e8;\n"
-                                        "}\n"
-                                        "\n"
-                                        "\n"
-                                        "")
+        test_results_form.setStyleSheet(self.main.CSS_style)
         self.test_relults_label = QtWidgets.QLabel(test_results_form)
         self.test_relults_label.setGeometry(QtCore.QRect(20, 10, 81, 16))
         self.test_relults_label.setObjectName("test_relults_label")
