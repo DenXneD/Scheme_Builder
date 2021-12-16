@@ -80,7 +80,7 @@ class EndConditionalOperation(Operation):
         }
 
     def code_row(self):
-        return "\n"
+        return ""
 
 
 class AssignmentOperation(Operation):
@@ -127,7 +127,7 @@ class PrintOperation(Operation):
         }
     
     def code_row(self):
-        return f"print({self.var_name})\n"
+        return f"print('{self.var_name} =', {self.var_name})\n"
 
 
 class InputOperation(Operation):
@@ -149,7 +149,7 @@ class InputOperation(Operation):
         }
 
     def code_row(self):
-        return f"{self.var_name} = input()\n"
+        return f"{self.var_name} = input('{self.var_name}: ')\n"
 
 
 OPERATIONS = [AssignmentOperation, ConditionalOperation, EndConditionalOperation, InputOperation, PrintOperation]

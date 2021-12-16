@@ -18,8 +18,11 @@ class SpringsToCodeParser(object):
         return code
 
     @classmethod
-    def generate_python_file_from_springs(cls, springs):
+    def generate_python_file_from_springs_and_return_code(cls, file_path, springs):
         """
+        :param file_path: full path to file
+        :type file_path: str
+
         :param springs: springs to generate python code
         :type springs: list[server.spring.domain.spring.Spring]
 
@@ -27,7 +30,7 @@ class SpringsToCodeParser(object):
         :rtype: str
         """
         code = cls.parse_springs_to_code(springs)
-        with open('../generated.py', 'w+') as file:
+        with open(file_path, 'w+') as file:
             file.write(code)
 
         return code
