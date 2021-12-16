@@ -1,14 +1,13 @@
 from abc import abstractmethod
-from erfa.helpers import classproperty
 
 
 class Operation(object):
     ID_IF = "If"
-    ID_ENDIF = "Endif"
+    ID_ENDIF = "End if"
     ID_ASSIGN = "Assign"
     ID_PRINT = "Print"
     ID_INPUT = "Input"
-    ID_DUMMY = "dummy id"
+    ID_DUMMY = "Dummy id"
     IDENTIFIERS = [ID_IF, ID_ENDIF, ID_ASSIGN, ID_PRINT, ID_INPUT]
     id = ID_DUMMY
 
@@ -20,7 +19,7 @@ class Operation(object):
         :param operation_json: json version of object
         :type operation_json: dict[str, Variable]
 
-        :rtype: Operation
+        :rtype: Needed Operation type
         """
 
     @abstractmethod
@@ -55,8 +54,7 @@ class ConditionalOperation(Operation):
             sign=operation_json["sign"],
             to_compare=operation_json["to_compare"]
         )
-
-    @classproperty
+    
     def json(self):
         return {
             "id": self.id,
@@ -65,7 +63,6 @@ class ConditionalOperation(Operation):
             "to_compare": self.to_compare
         }
 
-    @classproperty
     def code_row(self):
         return f"if {self.var_name} {self.sign} {self.to_compare}:\n"
 
@@ -77,13 +74,11 @@ class EndConditionalOperation(Operation):
     def parse(cls, operation_json: dict):
         return EndConditionalOperation()
 
-    @classproperty
     def json(self):
         return {
             "id": self.id
         }
 
-    @classproperty
     def code_row(self):
         return "\n"
 
@@ -99,10 +94,9 @@ class AssignmentOperation(Operation):
     def parse(cls, operation_json: dict):
         return AssignmentOperation(
             var_name=operation_json["var_name"],
-            to_assign=operation_json["to_assign"],
+            to_assign=operation_json["to_assign"]
         )
 
-    @classproperty
     def json(self):
         return {
             "id": self.id,
@@ -110,7 +104,6 @@ class AssignmentOperation(Operation):
             "to_assign": self.to_assign
         }
 
-    @classproperty
     def code_row(self):
         return f"{self.var_name} = {self.to_assign}\n"
 
@@ -126,15 +119,13 @@ class PrintOperation(Operation):
         return PrintOperation(
             var_name=operation_json["var_name"]
         )
-
-    @classproperty
+    
     def json(self):
         return {
             "id": self.id,
             "var_name": self.var_name
         }
-
-    @classproperty
+    
     def code_row(self):
         return f"print({self.var_name})\n"
 
@@ -151,14 +142,12 @@ class InputOperation(Operation):
             var_name=operation_json["var_name"]
         )
 
-    @classproperty
     def json(self):
         return {
             "id": self.id,
             "var_name": self.var_name
         }
 
-    @classproperty
     def code_row(self):
         return f"{self.var_name} = input()\n"
 

@@ -34,3 +34,14 @@ class SpringsModel(object):
         return SpringsToCodeParser.parse_springs_to_code(
             springs=[Spring.parse(spring_json) for spring_json in springs_json_list]
         )
+
+    @classmethod
+    def generate_code_for_spring(cls, spring_json):
+        """
+        :param spring_json: spring to convert
+        :type spring_json: dict
+
+        :return: generated file text
+        :rtype: str
+        """
+        return SpringsToCodeParser.parse_springs_to_code(springs=[Spring.parse(spring_json)])
