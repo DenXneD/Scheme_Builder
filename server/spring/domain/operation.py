@@ -3,7 +3,7 @@ from abc import abstractmethod
 
 class Operation(object):
     ID_IF = "If"
-    ID_ENDIF = "Endif"
+    ID_ENDIF = "End if"
     ID_ASSIGN = "Assign"
     ID_PRINT = "Print"
     ID_INPUT = "Input"
