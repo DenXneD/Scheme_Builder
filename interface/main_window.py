@@ -19,7 +19,7 @@ from server import application
 def reform_threads_list(threads):
     result = []
     for index in range(len(threads)):
-        result.append({"id": index, "operations": threads[index]["operations"]})
+        result.append({"id": index,"thread_name":threads[index]["thread_name"], "operations": threads[index]["operations"]})
     return result
 # my little костыли
 
@@ -28,18 +28,23 @@ class Ui_MainWindow(QtWidgets.QWidget):
         super().__init__(**kwargs)
         self.threads = []
         self.CSS_style = ("QWidget {\n"
-                          "  background-color: white;\n" # #2a1a41
+                          "  background-color: #2a1a41;\n" # #2a1a41
                           "  font: \"Roboto Mono\";\n"
                           "  font-size: 11px;\n"
                           "}\n"
                           "QPushButton {\n"
-                          "  border: 1px solid black;\n"
                           "  border-radius: 4px;\n"
                           "  background-color: #8EDBCE;\n"
                           "  color: black;\n"
                           "}\n"
                           "QPushButton:hover {\n"
                           "  background-color: #CDF9EF;\n"
+                          "}\n"
+                          "QPushButton#del_thread_btn, QPushButton#del_block_btn {\n"
+                          "  border-radius: 1px;\n"
+                          "}\n"
+                          "QPushButton#add_thread_btn, QPushButton#add_block_btn {\n"
+                          "  border-radius: 1px;\n"
                           "}\n"
                           "QPushButton#del_thread_btn:hover, QPushButton#del_block_btn:hover {\n"
                           "  background-color: #F08583;\n"
@@ -48,7 +53,10 @@ class Ui_MainWindow(QtWidgets.QWidget):
                           "  background-color: #67F09D;\n"
                           "}\n"
                           "QLabel {\n"
-                          "  color: black;\n"
+                          "  color: #4bd1e8;\n"
+                          "}\n"
+                          "QLabel#logo {\n"
+                          "  font: 13px;\n"
                           "}\n"
                           "QComboBox {\n"
                           "  border: 1px solid black;\n"
@@ -72,21 +80,21 @@ class Ui_MainWindow(QtWidgets.QWidget):
                           "  background-color: #4bd1e8;\n"
                           "}\n"
                           "")
-        self.window_size = (490, 292)
-        self.components_geometry = {"add_thread_btn": (120, 10, 81, 23),
-                                    "del_thread_btn": (210, 10, 81, 23),
-                                    "add_block_btn": (310, 10, 81, 23),
-                                    "del_block_btn": (400, 10, 81, 23),
-                                    "gen_code_btn": (10, 140, 101, 21),
-                                    "test_threads_btn": (10, 170, 101, 23),
-                                    "save_threads_btn": (10, 200, 101, 23),
-                                    "load_threads_btn": (10, 230, 101, 23),
-                                    "clear_threads_btn": (10, 260, 101, 23),
-                                    "block_label": (310, 40, 81, 20),
-                                    "logo": (10, 10, 101, 20),
-                                    "thread_list": (120, 40, 171, 243),
-                                    "blocks_list": (310, 70, 171, 213),
-                                    "block_comboBox": (400, 40, 81, 22)}
+        self.window_size = (380, 510)
+        self.components_geometry = {"add_thread_btn": (319, 49, 23, 23),
+                                    "del_thread_btn": (349, 49, 23, 23),
+                                    "add_block_btn": (189, 49, 23, 23),
+                                    "del_block_btn": (219, 49, 23, 23),
+                                    "gen_code_btn": (120, 10, 121, 31),
+                                    "test_threads_btn": (250, 10, 121, 31),
+                                    "save_threads_btn": (250, 430, 121, 31),
+                                    "load_threads_btn": (250, 470, 121, 31),
+                                    "block_label": (10, 50, 51, 21),
+                                    "thread_label": (250, 50, 61, 21),
+                                    "logo": (10, 10, 111, 31),
+                                    "thread_list": (250, 80, 121, 341),
+                                    "blocks_list": (10, 80, 231, 421),
+                                    "block_comboBox": (70, 50, 111, 22)}
 
     def setupUi(self, MainWindow):
         self.shift = 100
@@ -148,11 +156,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.load_threads_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.load_threads_btn.setObjectName("load_threads_btn")
         self.load_threads_btn.clicked.connect(self.load_threads_event)
-        self.clear_threads_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.clear_threads_btn.setGeometry(QtCore.QRect(*self.components_geometry["clear_threads_btn"]))
-        self.clear_threads_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.clear_threads_btn.setObjectName("clear_threads_btn")
-        self.clear_threads_btn.clicked.connect(self.clear_threads_event)
         self.block_label = QtWidgets.QLabel(self.centralwidget)
         self.block_label.setEnabled(False)
         self.block_label.setGeometry(QtCore.QRect(*self.components_geometry["block_label"]))
@@ -162,6 +165,15 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.block_label.setLineWidth(1)
         self.block_label.setAlignment(QtCore.Qt.AlignCenter)
         self.block_label.setObjectName("block_label")
+        self.thread_label = QtWidgets.QLabel(self.centralwidget)
+        self.thread_label.setEnabled(False)
+        self.thread_label.setGeometry(QtCore.QRect(*self.components_geometry["thread_label"]))
+        self.thread_label.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.thread_label.setStyleSheet("")
+        self.thread_label.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.thread_label.setLineWidth(1)
+        self.thread_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.thread_label.setObjectName("thread_label")
         self.logo = QtWidgets.QLabel(self.centralwidget)
         self.logo.setEnabled(False)
         self.logo.setGeometry(QtCore.QRect(*self.components_geometry["logo"]))
@@ -198,24 +210,24 @@ class Ui_MainWindow(QtWidgets.QWidget):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Scheme Builder"))
-        self.del_block_btn.setText(_translate("MainWindow", "DEL BLOCK"))
-        self.block_label.setText(_translate("MainWindow", "Block type"))
+        self.del_block_btn.setText(_translate("MainWindow", "-"))
+        self.block_label.setText(_translate("MainWindow", "Thread"))
         self.gen_code_btn.setText(_translate("MainWindow", "GENERATE CODE"))
         self.logo.setText(_translate("MainWindow", "Scheme Builder"))
+        self.thread_label.setText(_translate("MainWindow", "THREADS"))
         self.save_threads_btn.setText(_translate("MainWindow", "SAVE THREADS"))
         self.test_threads_btn.setText(_translate("MainWindow", "TEST THREADS"))
-        self.add_thread_btn.setText(_translate("MainWindow", "ADD THREAD"))
+        self.add_thread_btn.setText(_translate("MainWindow", "+"))
         __sortingEnabled = self.thread_list.isSortingEnabled()
         self.thread_list.setSortingEnabled(False)
         self.thread_list.setSortingEnabled(__sortingEnabled)
-        self.clear_threads_btn.setText(_translate("MainWindow", "CLEAR THREADS"))
-        self.add_block_btn.setText(_translate("MainWindow", "ADD BLOCK"))
+        self.add_block_btn.setText(_translate("MainWindow", "+"))
         self.block_comboBox.setItemText(0, _translate("MainWindow", "Assign"))
         self.block_comboBox.setItemText(1, _translate("MainWindow", "Print"))
         self.block_comboBox.setItemText(2, _translate("MainWindow", "Input"))
         self.block_comboBox.setItemText(3, _translate("MainWindow", "If"))
         self.block_comboBox.setItemText(4, _translate("MainWindow", "end if"))
-        self.del_thread_btn.setText(_translate("MainWindow", "DEL THREAD"))
+        self.del_thread_btn.setText(_translate("MainWindow", "-"))
         __sortingEnabled = self.blocks_list.isSortingEnabled()
         self.blocks_list.setSortingEnabled(False)
         self.blocks_list.setSortingEnabled(__sortingEnabled)
@@ -317,10 +329,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
     def load_threads_event(self):
         ...
 
-    def clear_threads_event(self):
-        self.threads.clear()
-        self.update_thread_list()
-
     def get_current_thread_id(self):
         list_len = self.thread_list.count()
         for index in range(list_len):
@@ -343,6 +351,11 @@ class Ui_MainWindow(QtWidgets.QWidget):
             item.setText(str(index + 1) + ". " + thread["thread_name"])
             index += 1
             self.thread_list.addItem(item)
+
+        if self.thread_list.count() != 0:
+            self.block_label.setText(self.threads[self.get_current_thread_id()]["thread_name"])
+        else:
+            self.block_label.setText("Thread")
         self.update_blocks_list()
 
     def update_blocks_list(self):

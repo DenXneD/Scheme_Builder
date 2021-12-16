@@ -13,26 +13,26 @@
 
 ASSIGN_OPERATION_DICT:
 {
-    - id: assign
+    - id: Assign
     - var_name: a
     - to_assign: 1 | b | c
 } -> a = 1 | a = b | a = c
 
 PRINT_OPERATION_DICT:
 {
-    - id: print
+    - id: Print
     - var_name: a
 } -> print(a)
 
 INPUT_OPERATION_DICT:
 {
-    - id: input
+    - id: Input
     - var_name: a
 } -> a = input()
 
 IF_OPERATION_DICT:
 {
-    - id: if
+    - id: If
     - var_name: a
     - sign: == | <
     - to_compare: 5
@@ -40,7 +40,7 @@ IF_OPERATION_DICT:
 
 ENDIF_OPERATION_DICT:
 {
-    - id: endif
+    - id: End if
 }
 
 
