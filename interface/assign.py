@@ -51,11 +51,9 @@ class Ui_assign_form(QtWidgets.QDialog):
         self.equals_assign_label.setText(_translate("assign_form", "="))
         self.add_assign_btn.setText(_translate("assign_form", "ADD Assign"))
 
+
     def add_assign_event(self):
         operation_info = {"id": "Assign",
-                          "var_name": self.left_assign_box.text(),
-                          "to_assign": self.right_assign_box.text()}
-        list_text = (operation_info["id"] + ": " +
-                     operation_info["var_name"] + " = " +
-                     operation_info["to_assign"])
-        self.main.add_event(self.assign_form, operation_info, list_text)
+                               "var_name": self.left_assign_box.text(),
+                               "to_assign": self.right_assign_box.text()}
+        self.main.add_event(self.assign_form, operation_info)

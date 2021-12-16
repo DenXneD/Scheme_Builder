@@ -46,8 +46,8 @@ class Ui_input_form(QtWidgets.QDialog):
         self.add_input_btn.setText(_translate("input_form", "ADD Input"))
         self.input_label.setText(_translate("input_form", "Variable name"))
 
+
     def add_input_event(self):
-        operation_info = {"id": "Input",
-                          "var_name": self.right_input_box.text()}
-        list_text = (operation_info["id"] + ": " + operation_info["var_name"])
-        self.main.add_event(self.input_form, operation_info, list_text)
+        self.operation_info = {"id": "Input",
+                               "var_name": self.right_input_box.text()}
+        self.main.add_event(self.input_form, self.operation_info)

@@ -48,5 +48,4 @@ class Ui_print_form(QtWidgets.QDialog):
 
     def add_print_event(self):
         operation_info = {"id": "Print", "var_name": self.print_box.text()}
-        list_text = (operation_info["id"] + ": " + operation_info["var_name"])
-        self.main.add_event(self.print_form, operation_info, list_text)
+        self.main.add_event(self.print_form, operation_info)

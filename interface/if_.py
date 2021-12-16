@@ -66,8 +66,4 @@ class Ui_if_form(QtWidgets.QDialog):
                           "var_name": self.left_if_box.text(),
                           "sign": self.if_comboBox.currentText(),
                           "to_compare": self.right_if_box.text()}
-        list_text = (operation_info["id"] + ": " +
-                     operation_info["var_name"] + " " +
-                     operation_info["sign"] + " " +
-                     operation_info["to_compare"])
-        self.main.add_event(self.if_form, operation_info, list_text)
+        self.main.add_event(self.if_form, operation_info)
