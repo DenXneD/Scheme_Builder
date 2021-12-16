@@ -13,125 +13,149 @@ from PyQt5.QtGui import QFont
 from interface import assign, if_, input, print, test_results, thread_name
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QPushButton, QVBoxLayout, QWidget
+from server import application
 
+# my little костыли
+def reform_threads_list(threads):
+    result = []
+    for index in range(len(threads)):
+        result.append({"id": index, "operations": threads[index]["operations"]})
+    return result
+# my little костыли
 
 class Ui_MainWindow(QtWidgets.QWidget):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.threads = []
+        self.CSS_style = ("QWidget {\n"
+                          "  background-color: white;\n" # #2a1a41
+                          "  font: \"Roboto Mono\";\n"
+                          "  font-size: 11px;\n"
+                          "}\n"
+                          "QPushButton {\n"
+                          "  border: 1px solid black;\n"
+                          "  border-radius: 4px;\n"
+                          "  background-color: #8EDBCE;\n"
+                          "  color: black;\n"
+                          "}\n"
+                          "QPushButton:hover {\n"
+                          "  background-color: #CDF9EF;\n"
+                          "}\n"
+                          "QPushButton#del_thread_btn:hover, QPushButton#del_block_btn:hover {\n"
+                          "  background-color: #F08583;\n"
+                          "}\n"
+                          "QPushButton#add_thread_btn:hover, QPushButton#add_block_btn:hover {\n"
+                          "  background-color: #67F09D;\n"
+                          "}\n"
+                          "QLabel {\n"
+                          "  color: black;\n"
+                          "}\n"
+                          "QComboBox {\n"
+                          "  border: 1px solid black;\n"
+                          "  background-color: #4bd1e8\n"
+                          "}\n"
+                          "QComboBox QAbstractItemView{\n"
+                          "  background-color: #4bd1e8\n"
+                          "}\n"
+                          "QListWidget {\n"
+                          "  border: 1px solid black;\n"
+                          "  border-radius: 4px;\n"
+                          "  background-color: #4bd1e8\n"
+                          "}\n"
+                          "QLineEdit {\n"
+                          "  border-radius: 1px;\n"
+                          "  border: 1px solid #8EDBCE;\n"
+                          "  background-color: #4bd1e8\n"
+                          "}\n"
+                          "QTextBrowser {\n"
+                          "  border-radius: 4px;\n"
+                          "  background-color: #4bd1e8;\n"
+                          "}\n"
+                          "")
+        self.window_size = (490, 292)
+        self.components_geometry = {"add_thread_btn": (120, 10, 81, 23),
+                                    "del_thread_btn": (210, 10, 81, 23),
+                                    "add_block_btn": (310, 10, 81, 23),
+                                    "del_block_btn": (400, 10, 81, 23),
+                                    "gen_code_btn": (10, 140, 101, 21),
+                                    "test_threads_btn": (10, 170, 101, 23),
+                                    "save_threads_btn": (10, 200, 101, 23),
+                                    "load_threads_btn": (10, 230, 101, 23),
+                                    "clear_threads_btn": (10, 260, 101, 23),
+                                    "block_label": (310, 40, 81, 20),
+                                    "logo": (10, 10, 101, 20),
+                                    "thread_list": (120, 40, 171, 243),
+                                    "blocks_list": (310, 70, 171, 213),
+                                    "block_comboBox": (400, 40, 81, 22)}
 
     def setupUi(self, MainWindow):
         self.shift = 100
         MainWindow.setObjectName("MainWindow")
         MainWindow.setWindowModality(QtCore.Qt.NonModal)
         MainWindow.setEnabled(True)
-        MainWindow.resize(490, 192 + self.shift)
+        MainWindow.resize(*self.window_size)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(sizePolicy)
-        MainWindow.setMinimumSize(QtCore.QSize(490, 192 + self.shift))
-        MainWindow.setMaximumSize(QtCore.QSize(490, 192 + self.shift))
+        MainWindow.setMinimumSize(QtCore.QSize(*self.window_size))
+        MainWindow.setMaximumSize(QtCore.QSize(*self.window_size))
         MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
         MainWindow.setWindowOpacity(1.0)
-        MainWindow.setStyleSheet("QWidget {\n"
-                                 "  background-color: #2a1a41;\n"
-                                 "  font: \"Roboto Mono\";\n"
-                                 "  font-size: 12px;\n"
-                                 "}\n"
-                                 "\n"
-                                 "QPushButton {\n"
-                                 "  border-radius: 4px;\n"
-                                 "  background-color: #8EDBCE;\n"
-                                 "  color: black;\n"
-                                 "  transition: background-color 1000ms linear;\n"
-                                 "}\n"
-                                 "\n"
-                                 "QPushButton:hover {\n"
-                                 "  background-color: #CDF9EF;\n"
-                                 "}\n"
-                                 "\n"
-                                 "QPushButton#del_thread_btn:hover, QPushButton#del_block_btn:hover {\n"
-                                 "  background-color: #F08583;\n"
-                                 "}\n"
-                                 "\n"
-                                 "QPushButton#add_thread_btn:hover, QPushButton#add_block_btn:hover {\n"
-                                 "  background-color: #67F09D;\n"
-                                 "}\n"
-                                 "\n"
-                                 "QLabel {\n"
-                                 "  color: #4bd1e8;\n"
-                                 "}\n"
-                                 "\n"
-                                 "QComboBox {\n"
-                                 "  background-color: #4bd1e8\n"
-                                 "}\n"
-                                 "\n"
-                                 "QComboBox QAbstractItemView{\n"
-                                 "  background-color: #4bd1e8\n"
-                                 "}\n"
-                                 "\n"
-                                 "\n"
-                                 "QListWidget {\n"
-                                 "  border-radius: 4px;\n"
-                                 "  background-color: #4bd1e8\n"
-                                 "}\n"
-                                 "\n"
-                                 "\n"
-                                 "")
+        MainWindow.setStyleSheet(self.CSS_style)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setStyleSheet("")
         self.centralwidget.setObjectName("centralwidget")
         # Buttons implement
         self.add_thread_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.add_thread_btn.setGeometry(QtCore.QRect(120, 10, 81, 23))
+        self.add_thread_btn.setGeometry(QtCore.QRect(*self.components_geometry["add_thread_btn"]))
         self.add_thread_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.add_thread_btn.setObjectName("add_thread_btn")
         self.add_thread_btn.clicked.connect(self.add_thread_event)
         self.del_thread_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.del_thread_btn.setGeometry(QtCore.QRect(210, 10, 81, 23))
+        self.del_thread_btn.setGeometry(QtCore.QRect(*self.components_geometry["del_thread_btn"]))
         self.del_thread_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.del_thread_btn.setObjectName("del_thread_btn")
         self.del_thread_btn.clicked.connect(self.del_thread_event)
         self.add_block_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.add_block_btn.setGeometry(QtCore.QRect(310, 10, 81, 23))
+        self.add_block_btn.setGeometry(QtCore.QRect(*self.components_geometry["add_block_btn"]))
         self.add_block_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.add_block_btn.setObjectName("add_block_btn")
         self.add_block_btn.clicked.connect(self.add_block_event)
         self.del_block_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.del_block_btn.setGeometry(QtCore.QRect(400, 10, 81, 23))
+        self.del_block_btn.setGeometry(QtCore.QRect(*self.components_geometry["del_block_btn"]))
         self.del_block_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.del_block_btn.setObjectName("del_block_btn")
         self.del_block_btn.clicked.connect(self.del_block_event)
         self.gen_code_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.gen_code_btn.setGeometry(QtCore.QRect(10, 40 + self.shift, 101, 21))
+        self.gen_code_btn.setGeometry(QtCore.QRect(*self.components_geometry["gen_code_btn"]))
         self.gen_code_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.gen_code_btn.setObjectName("gen_code_btn")
         self.gen_code_btn.clicked.connect(self.gen_code_event)
         self.test_threads_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.test_threads_btn.setGeometry(QtCore.QRect(10, 70 + self.shift, 101, 23))
+        self.test_threads_btn.setGeometry(QtCore.QRect(*self.components_geometry["test_threads_btn"]))
         self.test_threads_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.test_threads_btn.setObjectName("test_threads_btn")
         self.test_threads_btn.clicked.connect(self.test_threads_event)
         self.save_threads_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.save_threads_btn.setGeometry(QtCore.QRect(10, 100 + self.shift, 101, 23))
+        self.save_threads_btn.setGeometry(QtCore.QRect(*self.components_geometry["save_threads_btn"]))
         self.save_threads_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.save_threads_btn.setObjectName("save_threads_btn")
         self.save_threads_btn.clicked.connect(self.save_threads_event)
         self.load_threads_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.load_threads_btn.setGeometry(QtCore.QRect(10, 130 + self.shift, 101, 23))
+        self.load_threads_btn.setGeometry(QtCore.QRect(*self.components_geometry["load_threads_btn"]))
         self.load_threads_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.load_threads_btn.setObjectName("load_threads_btn")
         self.load_threads_btn.clicked.connect(self.load_threads_event)
         self.clear_threads_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.clear_threads_btn.setGeometry(QtCore.QRect(10, 160 + self.shift, 101, 23))
+        self.clear_threads_btn.setGeometry(QtCore.QRect(*self.components_geometry["clear_threads_btn"]))
         self.clear_threads_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.clear_threads_btn.setObjectName("clear_threads_btn")
         self.clear_threads_btn.clicked.connect(self.clear_threads_event)
         self.block_label = QtWidgets.QLabel(self.centralwidget)
         self.block_label.setEnabled(False)
-        self.block_label.setGeometry(QtCore.QRect(310, 40, 81, 20))
+        self.block_label.setGeometry(QtCore.QRect(*self.components_geometry["block_label"]))
         self.block_label.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.block_label.setStyleSheet("")
         self.block_label.setFrameShadow(QtWidgets.QFrame.Plain)
@@ -140,7 +164,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.block_label.setObjectName("block_label")
         self.logo = QtWidgets.QLabel(self.centralwidget)
         self.logo.setEnabled(False)
-        self.logo.setGeometry(QtCore.QRect(10, 10, 101, 20))
+        self.logo.setGeometry(QtCore.QRect(*self.components_geometry["logo"]))
         self.logo.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.logo.setStyleSheet("")
         self.logo.setFrameShadow(QtWidgets.QFrame.Plain)
@@ -148,18 +172,18 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.logo.setAlignment(QtCore.Qt.AlignCenter)
         self.logo.setObjectName("logo")
         self.thread_list = QtWidgets.QListWidget(self.centralwidget)
-        self.thread_list.setGeometry(QtCore.QRect(120, 40, 171, 143 + self.shift))
+        self.thread_list.setGeometry(QtCore.QRect(*self.components_geometry["thread_list"]))
         self.thread_list.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
         self.thread_list.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.thread_list.setObjectName("thread_list")
         self.thread_list.itemClicked.connect(self.update_blocks_list)
         self.blocks_list = QtWidgets.QListWidget(self.centralwidget)
-        self.blocks_list.setGeometry(QtCore.QRect(310, 70, 171, 113 + self.shift))
+        self.blocks_list.setGeometry(QtCore.QRect(*self.components_geometry["blocks_list"]))
         self.blocks_list.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
         self.blocks_list.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.blocks_list.setObjectName("blocks_list")
         self.block_comboBox = QtWidgets.QComboBox(self.centralwidget)
-        self.block_comboBox.setGeometry(QtCore.QRect(400, 40, 81, 22))
+        self.block_comboBox.setGeometry(QtCore.QRect(*self.components_geometry["block_comboBox"]))
         self.block_comboBox.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.block_comboBox.setObjectName("block_comboBox")
         self.block_comboBox.addItem("")
@@ -209,7 +233,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
             self.threads.pop(id_to_delete)
             self.update_thread_list()
         if self.thread_list.count() != 0 and id_to_delete == self.thread_list.count():
-            self.thread_list.setCurrentItem(self.thread_list.item(id_to_delete-1))
+            self.thread_list.setCurrentItem(self.thread_list.item(id_to_delete - 1))
             self.update_blocks_list()
         elif self.thread_list.count() != 0 and id_to_delete >= 0:
             self.thread_list.setCurrentItem(self.thread_list.item(id_to_delete))
@@ -267,13 +291,18 @@ class Ui_MainWindow(QtWidgets.QWidget):
 
     # TODO merge Generation Code with server function
     def gen_code_event(self):
-        ...
+        if self.thread_list.count() != 0:
+            pass
+        threads_to_file = reform_threads_list(self.threads)
+        test = application.SpringsModel.generate_springs_python_file(threads_to_file)
+        a = 1
 
     # TODO merge Test Treads with server function
     def test_threads_event(self):
         # there is example of needed data
         data = [{"name": "1. Thread", "state": "OK"},
                 {"name": "2. Thread", "state": "ERROR in block 3; If: e == 5; variable 'e' is not defined"}]
+
         self.test_results_form = QtWidgets.QWidget()
         self.test_results_ui = test_results.Ui_test_results_form(self)
         self.test_results_ui.setupUi(self.test_results_form)

@@ -25,33 +25,7 @@ class Ui_thread_name_form(QtWidgets.QDialog):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(thread_name_form.sizePolicy().hasHeightForWidth())
         thread_name_form.setSizePolicy(sizePolicy)
-        thread_name_form.setStyleSheet("QWidget {\n"
-                                        "  background-color: #2a1a41;\n"
-                                        "}\n"
-                                        "\n"
-                                        "QPushButton {\n"
-                                        "  border-radius: 4px;\n"
-                                        "  background-color: #8EDBCE;\n"
-                                        "  font: \"Roboto Mono\";\n"
-                                        "  font-size: 12px;\n"
-                                        "  color: black;\n"
-                                        "  transition: background-color 1000ms linear;\n"
-                                        "}\n"
-                                        "\n"
-                                        "QPushButton:hover {\n"
-                                        "  background-color: #CDF9EF;\n"
-                                        "}\n"
-                                        "\n"
-                                        "QLabel {\n"
-                                        "  color: #4bd1e8;\n"
-                                        "}\n"
-                                        "\n"
-                                        "QLineEdit {\n"
-                                        "  border-radius: 1px;\n"
-                                        "  border: 1px solid white;\n"
-                                        "  background-color: #4bd1e8\n"
-                                        "}\n"
-"")
+        thread_name_form.setStyleSheet(self.main.CSS_style)
         self.thread_name_box = QtWidgets.QLineEdit(thread_name_form)
         self.thread_name_box.setGeometry(QtCore.QRect(90, 10, 50, 20))
         self.thread_name_box.setObjectName("thread_name_box")
@@ -62,7 +36,6 @@ class Ui_thread_name_form(QtWidgets.QDialog):
         self.input_label = QtWidgets.QLabel(thread_name_form)
         self.input_label.setGeometry(QtCore.QRect(10, 10, 71, 21))
         self.input_label.setObjectName("thread_name_label")
-
         self.retranslateUi(thread_name_form)
         QtCore.QMetaObject.connectSlotsByName(thread_name_form)
 

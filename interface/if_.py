@@ -26,44 +26,7 @@ class Ui_if_form(QtWidgets.QDialog):
         sizePolicy.setHeightForWidth(if_form.sizePolicy().hasHeightForWidth())
         if_form.setSizePolicy(sizePolicy)
         if_form.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
-        if_form.setStyleSheet("QWidget {\n"
-                              "  background-color: #2a1a41;\n"
-                              "}\n"
-                              "\n"
-                              "QPushButton {\n"
-                              "  border-radius: 4px;\n"
-                              "  background-color: #8EDBCE;\n"
-                              "  font: \"Roboto Mono\";\n"
-                              "  font-size: 12px;\n"
-                              "  color: black;\n"
-                              "  transition: background-color 1000ms linear;\n"
-                              "}\n"
-                              "\n"
-                              "QPushButton:hover {\n"
-                              "  background-color: #CDF9EF;\n"
-                              "}\n"
-                              "\n"
-                              "QLabel {\n"
-                              "  color: #4bd1e8;\n"
-                              "}\n"
-                              "\n"
-                              "QLineEdit{\n"
-                              "  border-radius: 1px;\n"
-                              "  background-color: #4bd1e8;\n"
-                              "  border: 1px solid white;\n"
-                              "}\n"
-                              "\n"
-                              "QComboBox {\n"
-                              "  background-color: #4bd1e8;\n"
-                              "  color: black;\n"
-                              "}\n"
-                              "\n"
-                              "QComboBox QAbstractItemView {\n"
-                              "  background-color: #4bd1e8;\n"
-                              "  color: black;\n"
-                              "}\n"
-                              "\n"
-                              "")
+        if_form.setStyleSheet(self.main.CSS_style)
         self.left_if_box = QtWidgets.QLineEdit(if_form)
         self.left_if_box.setGeometry(QtCore.QRect(10, 10, 51, 21))
         self.left_if_box.setObjectName("left_if_box")
