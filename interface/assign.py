@@ -25,34 +25,7 @@ class Ui_assign_form(QtWidgets.QDialog):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(assign_form.sizePolicy().hasHeightForWidth())
         assign_form.setSizePolicy(sizePolicy)
-        assign_form.setStyleSheet("QWidget {\n"
-                                    "  background-color: #2a1a41;\n"
-                                    "}\n"
-                                    "\n"
-                                    "QPushButton {\n"
-                                    "  border-radius: 4px;\n"
-                                    "  background-color: #8EDBCE;\n"
-                                    "  font: \"Roboto Mono\";\n"
-                                    "  font-size: 12px;\n"
-                                    "  color: black;\n"
-                                    "  transition: background-color 1000ms linear;\n"
-                                    "}\n"
-                                    "\n"
-                                    "QPushButton:hover {\n"
-                                    "  background-color: #CDF9EF;\n"
-                                    "}\n"
-                                    "\n"
-                                    "QLabel {\n"
-                                    "  color: #4bd1e8;\n"
-                                    "}\n"
-                                    "\n"
-                                    "QLineEdit {\n"
-                                    "  border-radius: 1px;\n"
-                                    "  border: 1px solid white;\n"
-                                    "  background-color: #4bd1e8\n"
-                                    "}\n"
-                                    "\n"
-                                    "")
+        assign_form.setStyleSheet(self.main.CSS_style)
         self.equals_assign_label = QtWidgets.QLabel(assign_form)
         self.equals_assign_label.setGeometry(QtCore.QRect(60, 10, 30, 20))
         self.equals_assign_label.setLayoutDirection(QtCore.Qt.LeftToRight)

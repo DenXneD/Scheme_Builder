@@ -25,33 +25,7 @@ class Ui_input_form(QtWidgets.QDialog):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(input_form.sizePolicy().hasHeightForWidth())
         input_form.setSizePolicy(sizePolicy)
-        input_form.setStyleSheet("QWidget {\n"
-                                 "  background-color: #2a1a41;\n"
-                                 "}\n"
-                                 "\n"
-                                 "QPushButton {\n"
-                                 "  border-radius: 4px;\n"
-                                 "  background-color: #8EDBCE;\n"
-                                 "  font: \"Roboto Mono\";\n"
-                                 "  font-size: 12px;\n"
-                                 "  color: black;\n"
-                                 "  transition: background-color 1000ms linear;\n"
-                                 "}\n"
-                                 "\n"
-                                 "QPushButton:hover {\n"
-                                 "  background-color: #CDF9EF;\n"
-                                 "}\n"
-                                 "\n"
-                                 "QLabel {\n"
-                                 "  color: #4bd1e8;\n"
-                                 "}\n"
-                                 "\n"
-                                 "QLineEdit {\n"
-                                 "  border-radius: 1px;\n"
-                                 "  border: 1px solid white;\n"
-                                 "  background-color: #4bd1e8\n"
-                                 "}\n"
-                                 "")
+        input_form.setStyleSheet(self.main.CSS_style)
         self.right_input_box = QtWidgets.QLineEdit(input_form)
         self.right_input_box.setGeometry(QtCore.QRect(90, 10, 50, 20))
         self.right_input_box.setObjectName("right_input_box")

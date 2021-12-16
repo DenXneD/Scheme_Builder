@@ -1,15 +1,14 @@
+
 ------------------------------------------------------------------------------------------------------------------------
 - SPRING:
 {
-    - id: 3
-    (there will be id of spring)
+    - thread_name: thread1
+    (there will be thread name)
 
     - operations: [PRINT_OPERATION_DICT,  INPUT_OPERATION_DICT,  IF_OPERATION_DICT]
     (there will be list of operation dicts, examples are below)
 }
 
-
-------------------------------------------------------------------------------------------------------------------------
 - OPERATIONS:
 
 ASSIGN_OPERATION_DICT:
@@ -43,3 +42,26 @@ ENDIF_OPERATION_DICT:
 {
     - id: endif
 }
+
+
+TEST_RESULT:
+"{thread_name}: OK | {error message}"
+
+
+API:
+------------------------------------------------------------------------------------------------------------------------
+SAVE THREADS (list[SPRING]) -> None
+LOAD THREADS () -> list[SPRING]
+
+GENERATE CODE (SPRING) -> string
+TEST THREADS (list[SPRING]) -> list[TEST_RESULT]
+------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
