@@ -10,25 +10,18 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 
-from interface import assign, if_, input, print, test_results, thread_name
+from interface import assign, if_, input, print, results, thread_name
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QPushButton, QVBoxLayout, QWidget
 from server import application
 
-# my little костыли
-def reform_threads_list(threads):
-    result = []
-    for index in range(len(threads)):
-        result.append({"id": index,"thread_name":threads[index]["thread_name"], "operations": threads[index]["operations"]})
-    return result
-# my little костыли
 
 class Ui_MainWindow(QtWidgets.QWidget):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.threads = []
         self.CSS_style = ("QWidget {\n"
-                          "  background-color: #2a1a41;\n" # #2a1a41
+                          "  background-color: #2a1a41;\n"  # #2a1a41
                           "  font: \"Roboto Mono\";\n"
                           "  font-size: 11px;\n"
                           "}\n"
@@ -81,10 +74,10 @@ class Ui_MainWindow(QtWidgets.QWidget):
                           "}\n"
                           "")
         self.window_size = (380, 510)
-        self.components_geometry = {"add_thread_btn": (319, 49, 23, 23),
-                                    "del_thread_btn": (349, 49, 23, 23),
-                                    "add_block_btn": (189, 49, 23, 23),
-                                    "del_block_btn": (219, 49, 23, 23),
+        self.components_geometry = {"add_thread_btn": (349, 49, 23, 23),
+                                    "del_thread_btn": (319, 49, 23, 23),
+                                    "add_block_btn": (219, 49, 23, 23),
+                                    "del_block_btn": (189, 49, 23, 23),
                                     "gen_code_btn": (120, 10, 121, 31),
                                     "test_threads_btn": (250, 10, 121, 31),
                                     "save_threads_btn": (250, 430, 121, 31),
@@ -181,7 +174,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.logo.setStyleSheet("")
         self.logo.setFrameShadow(QtWidgets.QFrame.Plain)
         self.logo.setLineWidth(1)
-        self.logo.setAlignment(QtCore.Qt.AlignCenter)
+        # self.logo.setAlignment(QtCore.Qt.AlignCenter)
         self.logo.setObjectName("logo")
         self.thread_list = QtWidgets.QListWidget(self.centralwidget)
         self.thread_list.setGeometry(QtCore.QRect(*self.components_geometry["thread_list"]))
@@ -213,7 +206,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.del_block_btn.setText(_translate("MainWindow", "-"))
         self.block_label.setText(_translate("MainWindow", "Thread"))
         self.gen_code_btn.setText(_translate("MainWindow", "GENERATE CODE"))
-        self.logo.setText(_translate("MainWindow", "Scheme Builder"))
+        self.logo.setText(_translate("MainWindow", "SCHEME BUILDER"))
         self.thread_label.setText(_translate("MainWindow", "THREADS"))
         self.save_threads_btn.setText(_translate("MainWindow", "SAVE THREADS"))
         self.test_threads_btn.setText(_translate("MainWindow", "TEST THREADS"))
@@ -226,7 +219,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.block_comboBox.setItemText(1, _translate("MainWindow", "Print"))
         self.block_comboBox.setItemText(2, _translate("MainWindow", "Input"))
         self.block_comboBox.setItemText(3, _translate("MainWindow", "If"))
-        self.block_comboBox.setItemText(4, _translate("MainWindow", "end if"))
+        self.block_comboBox.setItemText(4, _translate("MainWindow", "End if"))
         self.del_thread_btn.setText(_translate("MainWindow", "-"))
         __sortingEnabled = self.blocks_list.isSortingEnabled()
         self.blocks_list.setSortingEnabled(False)
@@ -293,7 +286,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
         id_to_delete = self.get_current_block_id()
         current_thread_id = self.get_current_thread_id()
         if id_to_delete != -1:
-            self.threads[current_thread_id]["operations_text"].pop(id_to_delete)
             self.threads[current_thread_id]["operations"].pop(id_to_delete)
             self.update_blocks_list()
         if self.blocks_list.count() != 0 and id_to_delete == self.blocks_list.count():
@@ -301,13 +293,20 @@ class Ui_MainWindow(QtWidgets.QWidget):
         elif self.blocks_list.count() != 0 and id_to_delete >= 0:
             self.blocks_list.setCurrentItem(self.blocks_list.item(id_to_delete))
 
-    # TODO merge Generation Code with server function
     def gen_code_event(self):
         if self.thread_list.count() != 0:
             pass
-        threads_to_file = reform_threads_list(self.threads)
-        test = application.SpringsModel.generate_springs_python_file(threads_to_file)
-        a = 1
+        threads_for_server = self.reform_threads_list()
+        gen_code_string = application.SpringsModel.generate_springs_python_file(threads_for_server)
+        filename, ok = QtWidgets.QFileDialog.getSaveFileName(self,
+                                                             "Сохранить файл",
+                                                             "threads.py",
+                                                             "Python Files(*.py)")
+        try:
+            self.save_file(filename, gen_code_string)
+            self.result_window("Generated Code", gen_code_string)
+        except:
+            pass
 
     # TODO merge Test Treads with server function
     def test_threads_event(self):
@@ -315,11 +314,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         data = [{"name": "1. Thread", "state": "OK"},
                 {"name": "2. Thread", "state": "ERROR in block 3; If: e == 5; variable 'e' is not defined"}]
 
-        self.test_results_form = QtWidgets.QWidget()
-        self.test_results_ui = test_results.Ui_test_results_form(self)
-        self.test_results_ui.setupUi(self.test_results_form)
-        self.test_results_ui.data_to_HTML(data)
-        self.test_results_form.show()
+        self.result_window("Test", "test")
 
     # TODO merge Save Threads with server function
     def save_threads_event(self):
@@ -362,19 +357,59 @@ class Ui_MainWindow(QtWidgets.QWidget):
         index = self.get_current_thread_id()
         self.blocks_list.clear()
         if index != -1:
-            for operation in self.threads[index]["operations_text"]:
+            for operation in self.threads[index]["operations"]:
                 item = QtWidgets.QListWidgetItem()
-                item.setText(operation)
+                operation_name = self.make_operation_name(operation)
+                item.setText(operation_name)
                 self.blocks_list.addItem(item)
 
-    def add_event(self, form, operation_info, list_text):
+    @staticmethod
+    def make_operation_name(operation):
+        operation_text = ""
+        if operation["id"] == "Input":
+            operation_text = operation["id"] + ": " + operation["var_name"]
+        elif operation["id"] == "Assign":
+            operation_text = (operation["id"] + ": " +
+                              operation["var_name"] + " = " +
+                              operation["to_assign"])
+        elif operation["id"] == "If":
+            operation_text = (operation["id"] + ": " +
+                              operation["var_name"] + " " +
+                              operation["sign"] + " " +
+                              operation["to_compare"])
+        elif operation["id"] == "Print":
+            operation_text = operation["id"] + ": " + operation["var_name"]
+        return operation_text
+
+    def add_event(self, form, operation_info):
         thread_index = self.get_current_thread_id()
         block_index = self.get_current_block_id() + 1
         if thread_index != -1:
             self.threads[thread_index]["operations"].insert(block_index, operation_info)
             item = QtWidgets.QListWidgetItem()
-            item.setText(list_text)
-            self.threads[thread_index]["operations_text"].insert(block_index, item.text())
+            operation_name = self.make_operation_name(operation_info)
+            item.setText(operation_name)
             self.update_blocks_list()
             self.blocks_list.setCurrentItem(self.blocks_list.item(self.blocks_list.count() - 1))
         form.close()
+
+    def reform_threads_list(self):
+        result = []
+        for index in range(len(self.threads)):
+            result.append(
+                {"id": index, "thread_name": self.threads[index]["thread_name"],
+                 "operations": self.threads[index]["operations"]})
+        return result
+
+    def result_window(self, label_name, information):
+        self.results_form = QtWidgets.QWidget()
+        self.results_ui = results.Ui_results_form(self, label_name, information)
+        self.results_ui.setupUi(self.results_form)
+        self.results_ui.fill_results_box()
+        self.results_form.show()
+
+    @staticmethod
+    def save_file(filename, file):
+        f = open(filename, "w")
+        f.write(file)
+        f.close()

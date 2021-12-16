@@ -5,4 +5,3 @@ git pull
 git checkout base_interface
 git merge master
 git push
-pause
