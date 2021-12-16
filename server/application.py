@@ -45,6 +45,3 @@ class SpringsModel(object):
         :rtype: str
         """
         return SpringsToCodeParser.parse_springs_to_code(springs=[Spring.parse(spring_json)])
-
-
-print(SpringsModel.generate_code_for_spring({'id': 0, 'thread_name': 'dq', 'operations': [{'id': 'Assign', 'var_name': 'a', 'to_assign': '1'}, {'id': 'Assign', 'var_name': 'b', 'to_assign': '5'}, {'id': 'If', 'var_name': 'a', 'sign': '<', 'to_compare': 'b'}, {'id': 'Print', 'var_name': 'b'}, {'id': 'End if'}]}))
