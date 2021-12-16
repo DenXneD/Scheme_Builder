@@ -51,7 +51,6 @@ class Ui_thread_name_form(QtWidgets.QDialog):
         item.setText(new_thread_name)
         thread_id = self.main.get_current_thread_id()
         self.main.threads.append({"thread_name": item.text(), "operations_text": [], "operations": []})
-        self.main.update_blocks_list()
         self.main.update_thread_list()
         self.main.thread_list.setCurrentItem(self.main.thread_list.item(self.main.thread_list.count() - 1))
         self.thread_name_form.close()
