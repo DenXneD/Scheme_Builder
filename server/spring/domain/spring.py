@@ -50,13 +50,17 @@ class Spring(object):
             add_tabs * tab + f"def {self.method_name}():\n"
         tabs_q = 1 + add_tabs
         for operation in self.operations:
-            code += tabs_q * tab + operation.code_row()
             if operation.id == Operation.ID_IF:
+                code += tabs_q * tab + operation.code_row()
                 tabs_q += 1
+                continue
             elif operation.id == Operation.ID_ENDIF:
                 tabs_q -= 1
+                continue
 
             if tabs_q < 1:
                 tabs_q += 1
+
+            code += tabs_q * tab + operation.code_row()
 
         return code
