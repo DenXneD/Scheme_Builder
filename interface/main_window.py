@@ -1,6 +1,7 @@
 from interface import assign, if_, input, print, results, thread_name
 from PyQt5 import QtCore, QtGui, QtWidgets
 from server.application import SpringsModel
+from server.springs_test import SpringsTest
 
 
 class Ui_MainWindow(QtWidgets.QWidget):
@@ -256,14 +257,11 @@ class Ui_MainWindow(QtWidgets.QWidget):
                 index = self.get_current_thread_id()
                 if index != -1:
                     operation_info = {"id": "End if"}
-                    list_text = (operation_info["id"])
                     thread_index = self.get_current_thread_id()
                     block_index = self.get_current_block_id() + 1
                     if thread_index != -1:
                         self.threads[thread_index]["operations"].insert(block_index, operation_info)
                         item = QtWidgets.QListWidgetItem()
-                        item.setText(list_text)
-                        self.threads[thread_index]["operations_text"].insert(block_index, item.text())
                         self.update_blocks_list()
                         self.blocks_list.setCurrentItem(self.blocks_list.item(self.blocks_list.count() - 1))
 
@@ -287,17 +285,19 @@ class Ui_MainWindow(QtWidgets.QWidget):
                                                              "threads.py",
                                                              "Python Files(*.py)")
         try:
-            gen_code_string = SpringsModel.generate_springs_python_file(filename, threads_for_server)
+            gen_code_string = SpringsModel.generate_python_file_and_return_code(filename, threads_for_server)
             self.result_window("Generated Code", gen_code_string)
         except:
             self.result_window("Generated Code", "Code generation failed")
 
     # TODO merge Test Treads with server function
     def test_threads_event(self):
-        # threads_for_server = self.reform_threads_list()
-        # data = SpringsModel.test_springs(threads_for_server)
         if self.thread_list.count() != 0:
-            data = "1. Thread1 - OK\n2. Thread - ERROR in block 3; If: e == 5; variable 'e' is not defined"
+            threads_for_server = self.reform_threads_list()
+            try:
+                data = SpringsTest.run_threads_and_collect_errors(threads_for_server)
+            except:
+                data = "WRONG INPUT DATA"
             self.result_window("Test result", data)
 
     def save_threads_event(self):
@@ -313,12 +313,15 @@ class Ui_MainWindow(QtWidgets.QWidget):
             self.result_window("Saving results", "Threads saving failed")
 
     def load_threads_event(self):
-        filename, ok = QtWidgets.QFileDialog.getSaveFileName(self,
+        filename, ok = QtWidgets.QFileDialog.getOpenFileName(self,
                                                              "Загрузить файл",
                                                              "threads.pickle",
                                                              "Pickle Files(*.pickle)")
         try:
             self.threads = SpringsModel.load_springs_from_pickle_file(filename)
+            self.update_thread_list()
+            if self.thread_list.count() != 0:
+                self.thread_list.setCurrentItem(self.thread_list.item(0))
             self.result_window("Saving results", "Threads successfully loaded")
         except:
             self.result_window("Saving results", "Threads load failed")
@@ -347,11 +350,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
             item.setText(str(index + 1) + ". " + thread["thread_name"])
             index += 1
             self.thread_list.addItem(item)
-
-        if self.thread_list.count() != 0:
-            self.block_label.setText(self.threads[self.get_current_thread_id()]["thread_name"])
-        else:
-            self.block_label.setText("Thread")
         self.update_blocks_list()
 
     def update_blocks_list(self):
@@ -363,6 +361,12 @@ class Ui_MainWindow(QtWidgets.QWidget):
                 operation_name = self.make_operation_name(operation)
                 item.setText(operation_name)
                 self.blocks_list.addItem(item)
+
+        if self.thread_list.count() != 0:
+            self.block_label.setText(self.threads[self.get_current_thread_id()]["thread_name"])
+        else:
+            self.block_label.setText("Thread")
+
 
     @staticmethod
     def make_operation_name(operation):
@@ -380,6 +384,8 @@ class Ui_MainWindow(QtWidgets.QWidget):
                               operation["to_compare"])
         elif operation["id"] == "Print":
             operation_text = operation["id"] + ": " + operation["var_name"]
+        elif operation["id"] == "End if":
+            operation_text = operation["id"]
         return operation_text
 
     def add_event(self, form, operation_info):
@@ -410,8 +416,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.results_ui.fill_results_box()
         self.results_form.show()
 
-    @staticmethod
-    def save_file(filename, file):
-        f = open(filename, "w")
-        f.write(file)
-        f.close()
+    def test_threads(self):
+        ...
+

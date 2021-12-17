@@ -1,5 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
 
+from interface.find_input_errors import ErrorTest
+
 
 class Ui_assign_form(QtWidgets.QDialog):
     def __init__(self, root, **kwargs):
@@ -41,9 +43,12 @@ class Ui_assign_form(QtWidgets.QDialog):
         self.equals_assign_label.setText(_translate("assign_form", "="))
         self.add_assign_btn.setText(_translate("assign_form", "ADD Assign"))
 
-
     def add_assign_event(self):
-        operation_info = {"id": "Assign",
-                               "var_name": self.left_assign_box.text(),
-                               "to_assign": self.right_assign_box.text()}
-        self.main.add_event(self.assign_form, operation_info)
+        var1 = self.left_assign_box.text()
+        var2 = self.right_assign_box.text()
+        if ErrorTest(var1).variable_is_acceptable() and\
+                (ErrorTest(var2).variable_is_acceptable() or ErrorTest(var2).is_number()):
+            operation_info = {"id": "Assign",
+                              "var_name": var1,
+                              "to_assign": var2}
+            self.main.add_event(self.assign_form, operation_info)
