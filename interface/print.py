@@ -1,5 +1,4 @@
 from PyQt5 import QtCore, QtWidgets
-
 from interface.find_input_errors import ErrorTest
 
 
