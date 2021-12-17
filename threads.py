@@ -1,16 +1,23 @@
-# Thread 'dsa'
-def thread1():
-	d = 5
-	a = 8
-	g = input('g: ')
-	if g < d:
-		print('a =', a)
-		
-# Thread 'dwqd'
-def thread2():
-	d = 3
-	a = 0
-	print('d/a =', d/a)
+from server.exc_thread import ExcThread
+from server.parser import SpringsToCodeParser
 
-thread1()
-thread2()
+# Thread 'sda'
+def thread1():
+    d = 4
+    if d == d:
+            print('d =', d)
+        print('d =', d)
+
+
+results = ''
+threads = []
+thread = ExcThread(name='1. sda', target=thread1)
+threads.append(thread)
+thread.start()
+[thread.join() for thread in threads]
+
+
+for thread in threads:
+    results += thread.status()
+with open(SpringsToCodeParser.RESULT_FILE_PATH, "w+") as file:
+    file.write(results)
