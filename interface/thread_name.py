@@ -1,5 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
 
+from interface.find_input_errors import ErrorTest
+
 
 class Ui_thread_name_form(QtWidgets.QDialog):
     def __init__(self, root, **kwargs):
@@ -38,8 +40,9 @@ class Ui_thread_name_form(QtWidgets.QDialog):
     def add_event(self):
         item = QtWidgets.QListWidgetItem()
         new_thread_name = self.thread_name_box.text()
-        item.setText(new_thread_name)
-        self.main.threads.append({"thread_name": item.text(), "operations": []})
-        self.main.update_thread_list()
-        self.main.thread_list.setCurrentItem(self.main.thread_list.item(self.main.thread_list.count() - 1))
-        self.thread_name_form.close()
+        if ErrorTest(new_thread_name).variable_is_acceptable():
+            item.setText(new_thread_name)
+            self.main.threads.append({"thread_name": item.text(), "operations": []})
+            self.main.update_thread_list()
+            self.main.thread_list.setCurrentItem(self.main.thread_list.item(self.main.thread_list.count() - 1))
+            self.thread_name_form.close()

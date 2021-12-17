@@ -1,5 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
 
+from interface.find_input_errors import ErrorTest
+
 
 class Ui_input_form(QtWidgets.QDialog):
     def __init__(self, root, **kwargs):
@@ -38,6 +40,8 @@ class Ui_input_form(QtWidgets.QDialog):
 
 
     def add_input_event(self):
-        self.operation_info = {"id": "Input",
-                               "var_name": self.right_input_box.text()}
-        self.main.add_event(self.input_form, self.operation_info)
+        var = self.right_input_box.text()
+        if ErrorTest(var).variable_is_acceptable():
+            operation_info = {"id": "Input",
+                                   "var_name": self.right_input_box.text()}
+            self.main.add_event(self.input_form, operation_info)
