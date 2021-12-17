@@ -39,15 +39,16 @@ class Spring(object):
             "operations": [operation.json() for operation in self.operations]
         }
 
-    def as_code(self):
+    def as_code(self, add_tabs=0):
         """
         :return: generated code of spring method
         :rtype: str
         """
-        code = f"# Thread '{self.name}'\n" \
-               f"def {self.method_name}():\n"
-        tabs_q = 1
-        tab = '\t'
+        tab = '    '
+
+        code = add_tabs * tab + f"# Thread '{self.name}'\n" + \
+            add_tabs * tab + f"def {self.method_name}():\n"
+        tabs_q = 1 + add_tabs
         for operation in self.operations:
             code += tabs_q * tab + operation.code_row()
             if operation.id == Operation.ID_IF:
