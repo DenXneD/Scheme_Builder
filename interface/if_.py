@@ -1,5 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from interface.find_input_errors import ErrorTest
+
 
 class Ui_if_form(QtWidgets.QDialog):
     def __init__(self, root, **kwargs):
@@ -36,7 +38,6 @@ class Ui_if_form(QtWidgets.QDialog):
         self.if_comboBox.addItem("")
         self.if_comboBox.addItem("")
         self.if_comboBox.addItem("")
-        self.if_comboBox.addItem("")
 
         self.retranslateUi(if_form)
         QtCore.QMetaObject.connectSlotsByName(if_form)
@@ -48,12 +49,15 @@ class Ui_if_form(QtWidgets.QDialog):
         self.if_comboBox.setItemText(0, _translate("if_form", "=="))
         self.if_comboBox.setItemText(1, _translate("if_form", "<"))
         self.if_comboBox.setItemText(2, _translate("if_form", ">"))
-        self.if_comboBox.setItemText(3, _translate("if_form", "<="))
-        self.if_comboBox.setItemText(4, _translate("if_form", ">="))
+        self.if_comboBox.setItemText(3, _translate("if_form", "!="))
 
     def add_if_event(self):
-        operation_info = {"id": "If",
-                          "var_name": self.left_if_box.text(),
-                          "sign": self.if_comboBox.currentText(),
-                          "to_compare": self.right_if_box.text()}
-        self.main.add_event(self.if_form, operation_info)
+        var1 = self.left_if_box.text()
+        var2 = self.right_if_box.text()
+        if (ErrorTest(var1).variable_is_acceptable() or ErrorTest(var1).is_number()) and\
+                (ErrorTest(var2).variable_is_acceptable() or ErrorTest(var2).is_number()):
+            operation_info = {"id": "If",
+                              "var_name": self.left_if_box.text(),
+                              "sign": self.if_comboBox.currentText(),
+                              "to_compare": self.right_if_box.text()}
+            self.main.add_event(self.if_form, operation_info)

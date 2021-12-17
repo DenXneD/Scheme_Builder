@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtWidgets
+from interface.find_input_errors import ErrorTest
 
 
 class Ui_print_form(QtWidgets.QDialog):
@@ -37,5 +38,7 @@ class Ui_print_form(QtWidgets.QDialog):
         self.print_label.setText(_translate("print_form", "Variable name"))
 
     def add_print_event(self):
-        operation_info = {"id": "Print", "var_name": self.print_box.text()}
-        self.main.add_event(self.print_form, operation_info)
+        var = self.print_box.text()
+        if ErrorTest(var).print_is_acceptable():
+            operation_info = {"id": "Print", "var_name": self.print_box.text()}
+            self.main.add_event(self.print_form, operation_info)

@@ -1,9 +1,23 @@
-# Thread ''
+from server.exc_thread import ExcThread
+from server.parser import SpringsToCodeParser
+
+# Thread 'sda'
 def thread1():
-	גיצג = גיצג
+    d = 4
+    if d == d:
+            print('d =', d)
+        print('d =', d)
 
-# Thread 'גג'
-def thread2():
 
-thread1()
-thread2()
+results = ''
+threads = []
+thread = ExcThread(name='1. sda', target=thread1)
+threads.append(thread)
+thread.start()
+[thread.join() for thread in threads]
+
+
+for thread in threads:
+    results += thread.status()
+with open(SpringsToCodeParser.RESULT_FILE_PATH, "w+") as file:
+    file.write(results)
