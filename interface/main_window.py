@@ -1,7 +1,6 @@
 from interface import assign, if_, input, print, results, thread_name
 from PyQt5 import QtCore, QtGui, QtWidgets
 from server.application import SpringsModel
-from server.springs_test import SpringsTest
 
 
 class Ui_MainWindow(QtWidgets.QWidget):
@@ -290,14 +289,13 @@ class Ui_MainWindow(QtWidgets.QWidget):
         except:
             self.result_window("Generated Code", "Code generation failed")
 
-    # TODO merge Test Treads with server function
     def test_threads_event(self):
         if self.thread_list.count() != 0:
             threads_for_server = self.reform_threads_list()
             try:
-                data = SpringsTest.run_threads_and_collect_errors(threads_for_server)
+                data = SpringsModel.run_tests_and_return_results(threads_for_server)
             except:
-                data = "WRONG INPUT DATA"
+                data = "WRONG INPUT"
             self.result_window("Test result", data)
 
     def save_threads_event(self):
@@ -367,7 +365,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
         else:
             self.block_label.setText("Thread")
 
-
     @staticmethod
     def make_operation_name(operation):
         operation_text = ""
@@ -393,9 +390,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
         block_index = self.get_current_block_id() + 1
         if thread_index != -1:
             self.threads[thread_index]["operations"].insert(block_index, operation_info)
-            item = QtWidgets.QListWidgetItem()
-            operation_name = self.make_operation_name(operation_info)
-            item.setText(operation_name)
             self.update_blocks_list()
             self.blocks_list.setCurrentItem(self.blocks_list.item(self.blocks_list.count() - 1))
         form.close()
